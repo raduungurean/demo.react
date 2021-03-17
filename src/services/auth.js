@@ -12,6 +12,16 @@ function signIn(email, password) {
     });
 }
 
+function signInWithProviderAndToken(provider, token) {
+    return new Promise((resolve, reject) => {
+        axios.post(`${config.url.AUTH}/auth/${provider}`, {
+            code: token,
+        }).then((response) => {
+            resolve(response.data);
+        }).catch(err => reject(err));
+    });
+}
+
 function refreshToken(token) {
     return new Promise((resolve, reject) => {
         axios.post(`${config.url.AUTH}/auth/refresh`, {}, {
@@ -26,5 +36,6 @@ function refreshToken(token) {
 
 export const auth = {
     signIn,
-    refreshToken
+    refreshToken,
+    signInWithProviderAndToken
 };

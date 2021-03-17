@@ -26,6 +26,7 @@ function App() {
                 await dispatch(refreshToken(localStorageToken))
                 await setIsLoading(false);
             }
+
             _refreshToken();
         }
 
@@ -35,14 +36,16 @@ function App() {
         return <span className="mt-2 ml-2">loading...</span>;
     }
 
-    return <Router>
-        <Switch>
-            <Route exact path="/" component={LoginFormWrapper} />
-            <Route exact path="/privacy-policy" component={StaticPage} />
-            <Route exact path="/terms-of-service" component={StaticPage} />
-            <PrivateRoute exact token={token} path="/home" component={HomeComponent} />
-        </Switch>
-    </Router>
+    return <>
+        <Router>
+            <Switch>
+                <Route exact path="/" component={LoginFormWrapper}/>
+                <Route exact path="/privacy-policy" component={StaticPage}/>
+                <Route exact path="/terms-of-service" component={StaticPage}/>
+                <PrivateRoute exact token={token} path="/home" component={HomeComponent}/>
+            </Switch>
+        </Router>
+    </>
 }
 
 export default App;

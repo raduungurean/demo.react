@@ -2,8 +2,8 @@ import React from "react";
 import SocialLoginButton from "./SocialLoginButton";
 import {useDispatch, useSelector} from "react-redux";
 import {useState, useEffect} from "react";
-import {signInClearErrorMessage, signInWithEmailAndPassword} from "../actions/auth";
-import {selectAuthInProgress, selectErrorSignIn, selectToken} from "../selectors/auth";
+import {signInClearErrorMessage, signInWithEmailAndPassword, signInWithProviderAndAccessToken} from "../actions/auth";
+import {selectAuthInProgress, selectAuthInProgressProvider, selectErrorSignIn, selectToken} from "../selectors/auth";
 import isEmail from "validator/lib/isEmail";
 import isLength from "validator/lib/isLength";
 import clsx from "clsx";
@@ -16,6 +16,7 @@ import {config} from "../constants";
 function LoginForm() {
 
     const inProgress = useSelector(selectAuthInProgress);
+    const inProgressProvider = useSelector(selectAuthInProgressProvider);
     const errorSignIn = useSelector(selectErrorSignIn);
     const token = useSelector(selectToken);
     const [email, setEmail] = useState('');
@@ -87,7 +88,7 @@ function LoginForm() {
                 type="button"
                 onClick={() => signIn(email, password)}
                 className="inline-flex justify-center items-center text-base w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-blue-500 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-blue-200 focus:ring-4">
-                {inProgress && <ProgressSpinner />}
+                {inProgress && <ProgressSpinner color={'white'} />}
                 <span>Sign In</span>
             </button>
         </div>
@@ -100,11 +101,26 @@ function LoginForm() {
             <div className="flex flex-col space-y-4">
                 <FacebookLogin
                     appId={config.FB_APP_ID}
-                    autoLoad
-                    callback={(response) => {console.log('### callback', response)}}
-                    render={renderProps => (
-                        <SocialLoginButton onClick={renderProps.onClick} type="facebook" title="Facebook"/>
-                    )}
+                    callback={(response) => {
+                        if (response.accessToken) {
+                            dispatch(signInWithProviderAndAccessToken({
+                                provider: 'facebook',
+                                token: response.accessToken
+                            }));
+                        }
+                    }}
+                    render={renderProps => {
+                        if (inProgressProvider && inProgressProvider['facebook']) {
+                            return <ProgressSpinner color={'black'} />
+                        }
+                        return (
+                            <SocialLoginButton
+                                onClick={() => renderProps.onClick()}
+                                type="facebook"
+                                title="Facebook"
+                            />
+                        );
+                    }}
                 />
                 <SocialLoginButton onClick={() => alert('not implemented')} type="google" title="Google"/>
                 <SocialLoginButton onClick={() => alert('not implemented')} type="github" title="Github"/>
