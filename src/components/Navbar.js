@@ -49,7 +49,7 @@ const Navbar = () => {
                         <div className="hidden sm:block sm:ml-6">
                             <div className="flex space-x-4">
                                 <span onClick={() => history.push('/home')} className="cursor-pointer bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</span>
-                                <span onClick={() => history.push('/posts')} className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Posts</span>
+                                <span onClick={() => history.push('/')} className="cursor-pointer text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Posts</span>
                             </div>
                         </div>
                     </div>
@@ -99,7 +99,7 @@ const Navbar = () => {
             { isMenuOpen && <div className="sm:hidden" id="mobile-menu">
                 <div className="px-2 pt-2 pb-3 space-y-1">
                     <span onClick={() => history.push('/home')} className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer">Dashboard</span>
-                    <span onClick={() => history.push('/posts')} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer">Team</span>
+                    <span onClick={() => history.push('/')} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer">Posts</span>
                 </div>
             </div> }
         </nav>

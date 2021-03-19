@@ -54,13 +54,18 @@ export const signInWithProviderAndAccessToken = createAsyncThunk(
 
 export const refreshToken = createAsyncThunk(
     'refresh/token',
-    async (token, {dispatch, rejectWithValue}) => {
-        let response = await auth.refreshToken(token);
-        if (response && response.access_token && response.firebase_token) {
-            const firebaseUser = await firebaseAuth.signInWithCustomToken(response.firebase_token);
-            await signInLocalStorage(response.access_token);
+    async ({token, onError}, {dispatch, rejectWithValue}) => {
+        try {
+            let response = await auth.refreshToken(token);
+            if (response && response.access_token && response.firebase_token) {
+                const firebaseUser = await firebaseAuth.signInWithCustomToken(response.firebase_token);
+                await signInLocalStorage(response.access_token);
+            }
+            return response ? response : undefined;
+        } catch (e) {
+            onError(e.message);
+            rejectWithValue(e.message);
         }
-        return response ? response : undefined;
     }
 )
 

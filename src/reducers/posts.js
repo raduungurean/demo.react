@@ -1,10 +1,11 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {addPost, loadPosts} from "../actions/posts";
+import {addPost, clearAddError, clearAddSuccess, loadPosts} from "../actions/posts";
 
 const initialState = {
     isAdding: false,
     postsList: [],
-    showErrorMessage: false,
+    showAddPostErrorMessage: false,
+    showAddPostSuccessMessage: false,
 };
 
 const postsReducer = createReducer(initialState, (builder) => {
@@ -13,17 +14,26 @@ const postsReducer = createReducer(initialState, (builder) => {
     });
     builder.addCase(addPost.fulfilled, (state, action) => {
         state.isAdding = false;
-        if (action.payload) {
-            state.postsList.push(action.payload);
-        }
+        state.postsList.push(action.payload);
+        state.showAddPostSuccessMessage = true;
     });
     builder.addCase(addPost.rejected, (state, action) => {
         state.isAdding = false;
-        state.showErrorMessage = true;
+        if (action.error) {
+            state.showAddPostErrorMessage = true;
+        }
     });
     builder.addCase(loadPosts.fulfilled, (state, action) => {
-        if (action.payload) {
-            state.postsList.unshift(...action.payload)
+        state.postsList.unshift(...action.payload)
+    });
+    builder.addCase(clearAddError, (state, action) => {
+        if (state.showAddPostErrorMessage) {
+            state.showAddPostErrorMessage = false;
+        }
+    });
+    builder.addCase(clearAddSuccess, (state, action) => {
+        if (state.showAddPostSuccessMessage) {
+            state.showAddPostSuccessMessage = false;
         }
     });
 });

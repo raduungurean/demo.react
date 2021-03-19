@@ -1,0 +1,1 @@
+export const selectAppIsLoading = state => state.layout.appIsLoading;

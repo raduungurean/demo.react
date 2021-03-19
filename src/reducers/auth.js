@@ -55,7 +55,7 @@ const authReducer = createReducer(initialState, (builder) => {
             if (action.payload) {
                 state.user.token = action.payload.access_token;
             }
-        });
+        })
 });
 
 export default authReducer;
