@@ -12,6 +12,7 @@ import ProgressSpinner from "./ProgressSpinner";
 import {useHistory} from "react-router";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import {config} from "../constants";
+import GoogleLogin from "react-google-login";
 
 function LoginForm() {
 
@@ -122,7 +123,16 @@ function LoginForm() {
                         );
                     }}
                 />
-                <SocialLoginButton onClick={() => alert('not implemented')} type="google" title="Google"/>
+                <GoogleLogin
+                    clientId={config.GOOGLE_CLIENT_ID}
+                    render={renderProps => (
+                        <SocialLoginButton onClick={renderProps.onClick} type="google" title="Google" />
+                    )}
+                    buttonText="Login"
+                    onSuccess={(response) => console.log('### response', response)}
+                    onFailure={() => {}}
+                    cookiePolicy={'single_host_origin'}
+                />
                 <SocialLoginButton onClick={() => alert('not implemented')} type="github" title="Github"/>
             </div>
         </div>
